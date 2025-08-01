@@ -24,6 +24,7 @@ gen:
 	ipxact2vhdl --srcFile example/input/test.xml --destDir example/output
 	ipxact2md --srcFile example/input/test.xml --destDir example/output
 	ipxact2c --srcFile example/input/test.xml --destDir example/output
+	ipxact2py --srcFile example/input/test.xml --destDir example/output
 	pandoc -s example/output/example.rst -o example/output/example.html
 	pandoc -s example/output/example.rst -o example/output/example.rtf
 	pandoc -s example/output/example.rst -o example/output/example.docx
@@ -34,6 +35,7 @@ gen:
 	ipxact2md --srcFile example/input/test.xml --destDir example/output_default  --config example/input/default.ini
 	ipxact2vhdl --srcFile example/input/test.xml --destDir example/output_default  --config example/input/default.ini
 	ipxact2c --srcFile example/input/test.xml --destDir example/output_default  --config example/input/default.ini
+	ipxact2py --srcFile example/input/test.xml --destDir example/output_default
 
         # no default config
 	ipxact2systemverilog --srcFile example/input/test.xml --destDir example/output_no_default  --config example/input/no_default.ini
@@ -41,6 +43,7 @@ gen:
 	ipxact2md --srcFile example/input/test.xml --destDir example/output_no_default  --config example/input/no_default.ini
 	ipxact2vhdl --srcFile example/input/test.xml --destDir example/output_no_default  --config example/input/no_default.ini
 	ipxact2c --srcFile example/input/test.xml --destDir example/output_no_default  --config example/input/no_default.ini
+	ipxact2py --srcFile example/input/test.xml --destDir example/output_no_default
 
         # RestructuredText and Sphinx with Wavedrom
 	ipxact2rst --srcFile example/input/test.xml --destDir example/output_sphinx  --config example/input/sphinx.ini
@@ -55,6 +58,7 @@ gen:
 	ipxact2vhdl --srcFile example/input/test2.xml --destDir example/output
 	ipxact2md --srcFile example/input/test2.xml --destDir example/output
 	ipxact2c --srcFile example/input/test2.xml --destDir example/output
+	ipxact2py --srcFile example/input/test.xml --destDir example/output
 
 
 compile: 
@@ -106,6 +110,11 @@ validate:
 
 test_rst:
 	rst-lint example/output/*.rst
+
+test_py:
+	pylint example/output/*.py
+	pylint example/output_default/*.py
+	pylint example/output_no_default/*.py
 
 venv: requirements.txt
 	python3 -m venv ./venv
