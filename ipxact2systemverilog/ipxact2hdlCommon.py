@@ -230,8 +230,7 @@ class pyAddressBlock(addressBlockClass):
 
     def returnObjectClass(self):
         r = ''
-        r += "from enum import IntEnum\n"
-
+        r += "from enum import IntEnum\n\n"
         # automatic relative/absolute import
         r += "try:\n"
         r += "  from .acces_layer import *     # relative import\n"
@@ -260,9 +259,9 @@ class pyAddressBlock(addressBlockClass):
 
             r += f"class {reg.name}_type(Register):\n"
             if reg.desc:
-                r += "    '''\n"
-                r += f"    {reg.desc}\n"
-                r += "    '''\n"
+                r += '    """\n'
+                r += f'    {reg.desc}\n'
+                r += '    """\n'
                 
             r += "    def __init__(self, parent_ip, address_offset):\n"
             r += "        super().__init__(parent_ip, address_offset)\n"
@@ -276,22 +275,34 @@ class pyAddressBlock(addressBlockClass):
                 else:
                     r += f"        # {bits}\n"
                 if reg.enumTypeList[i]:
-                    _line = f"        self._{reg.fieldNameList[i]} = EnumField(self,\n"
-                    _indent = _line.find('(') + 1
-                    r += _line
-                    r += " " * _indent + f"bit_width={reg.bitWidthList[i]},\n"
-                    r += " " * _indent + f"bit_offset={reg.bitOffsetList[i]},\n"
-                    r += " " * _indent + f"access='{reg.access}',\n"
-                    r += " " * _indent + f"enum_type={reg.enumTypeList[i].name}_enum)"
+                    r += f'        self._{reg.fieldNameList[i]} = EnumField(\n'
+                    r += f'            self, bit_width={reg.bidWidthList[i]}, '
+                    f'bit_offset={reg.bitOffsetList[i]}, '
+                    f'access="{reg.access}", '
+                    f'enum_type={reg.enumTypeList[i].name}_enum\n'
+                    r += f'        )'
+                    # _indent = _line.find('(') + 1
+                    # r += _line
+                    # r += " " * _indent + f"bit_width={reg.bitWidthList[i]},\n"
+                    # r += " " * _indent + f"bit_offset={reg.bitOffsetList[i]},\n"
+                    # r += " " * _indent + f"access='{reg.access}',\n"
+                    # r += " " * _indent + f"enum_type={reg.enumTypeList[i].name}_enum)"
                 else:
-                    _line = f"        self._{reg.fieldNameList[i]} = IntegerField(self,\n"
-                    _indent = _line.find('(') + 1
-                    r += _line
-                    r += " " * _indent + f"bit_width={reg.bitWidthList[i]},\n"
-                    r += " " * _indent + f"bit_offset={reg.bitOffsetList[i]},\n"
-                    r += " " * _indent + f"access='{reg.access}',\n"
-                    r += " " * _indent + f"minimum={reg.fieldMaximumConstraintsList[i]},\n"
-                    r += " " * _indent + f"maximum={reg.fieldMinimumConstraintsList[i]})"
+                    r += f'        self._{reg.fieldNameList[i]} = IntegerField(\n'
+                    r += f'            self, bit_width={reg.bitWidthList[i]}, '
+                    f'bit_offset={reg.bitOffsetList[i]}, '
+                    f'access="{reg.access}", '
+                    f'minimum={reg.fieldMinimumConstraintsList[i]}, '
+                    f'maximum={reg.fieldMaximumConstraintsList[i]}, '
+                    r += f'        )'
+                    # _line = f"        self._{reg.fieldNameList[i]} = IntegerField(self,\n"
+                    # _indent = _line.find('(') + 1
+                    # r += _line
+                    # r += " " * _indent + f"bit_width={reg.bitWidthList[i]},\n"
+                    # r += " " * _indent + f"bit_offset={reg.bitOffsetList[i]},\n"
+                    # r += " " * _indent + f"access='{reg.access}',\n"
+                    # r += " " * _indent + f"minimum={reg.fieldMinimumConstraintsList[i]},\n"
+                    # r += " " * _indent + f"maximum={reg.fieldMaximumConstraintsList[i]})"
                 r += "\n"
 
             r += "\n"
