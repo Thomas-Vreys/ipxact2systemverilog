@@ -32,8 +32,7 @@ DEFAULT_INI = {'global': {'unusedholes': 'yes',
                           'onebitenum': 'no'},
                 'vhdl': {'PublicConvFunct': 'no',
                         'std': 'unresolved'},
-                'rst': {'wavedrom': 'no'},
-                'py': {'imports': 'absolute'}}
+                'rst': {'wavedrom': 'no'}}
 
 
 def sortRegisterAndFillHoles(regName,
@@ -204,10 +203,6 @@ class pyAddressBlock(addressBlockClass):
         self.suffix = ".py"
         self.library = ""
         self.config = config
-        if self.config['py']['imports'] == "absolute":
-            self.imports = "absolute"
-        else:
-            self.imports = "relative"
 
 
     def returnAsString(self):
@@ -237,10 +232,11 @@ class pyAddressBlock(addressBlockClass):
         r = ''
         r += "from enum import IntEnum\n"
 
-        if self.imports == "absolute":
-            r += "from acces_layer import *\n"
-        else:
-            r += "from .acces_layer import *\n"
+        # automatic relative/absolute import
+        r += "try:\n"
+        r += "  from .acces_layer import *     # relative import\n"
+        r += "except ImportError:\n"
+        r += "  from acces_layer import *      # absolute import\n"
 
         r += "\n\n"
         return r
@@ -1449,3 +1445,4 @@ class ipxact2otherGenerator():
                     includeFileName = "acces_layer" + ".py"
                     includeString = block.returnIncludeString()
                     self.write(includeFileName, includeString)
+                    self.write("__init__.py", "")
