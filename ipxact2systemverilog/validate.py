@@ -7,10 +7,10 @@ def extractIpxactVersion(XMLtree):
     if root.tag.startswith('{') and '}' in root.tag:
         namespace_uri = root.tag.split('}', 1)[0][1:]
         version = namespace_uri.split('/')[-1]
-        if version == "1.5":
+        if version in ["1.5", "1685-2009","1685-2014","1685-2022"]:
             return version
         else:
-            raise Exception(f"Found unsupported IP-XACT version: '{version}', Only supported version: '1.5'")
+            raise Exception(f"Found unsupported IP-XACT version: '{version}', Supported versions: '1.5', '1685-2009', '1685-2014', '1685-2022'")
 
 
 
